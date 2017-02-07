@@ -1,4 +1,5 @@
 
+"""main app"""
 from flask import Flask, render_template, request, redirect, url_for, send_file
 from models import *
 
@@ -16,6 +17,7 @@ def teardown_request(e):
 def cars():
     return render_template('index.html')
 
+# UI Route
 @app.route('/<int:carid>')
 @app.route('/')
 def home(carid=None):
@@ -30,36 +32,43 @@ def home(carid=None):
 
     return render_template(template, car=cars)
 
-@app.route('/newCar', methods=['POST'])
+# POST Car
+@app.route('/new/car', methods=['POST'])
 def new_car():
-    res = Car.create(
-        make=request.form['Make'],
-        model=request.form['Model'],
-        year=request.form['Year']
-    )
-
+    try:
+        res = Car.create(
+            make=request.form['Make'],
+            model=request.form['Model'],
+            year=request.form['Year']
+        )
+    except Exception as error:
+        pass
     return redirect(url_for('home'))
 
-@app.route('/deleteCar', methods=['POST'])
-def delete_car():
-    car = Car.get(Car.id == request.form['id'])
+# DELETE Car
+@app.route('/delete/car/<int:carid>', methods=['POST'])
+def delete_car(carid):
+    car = Car.get(Car.id == carid)
     if car:
         car.delete_instance()
 
     return redirect(url_for('home'))
 
-@app.route('/updateCar', methods=['POST'])
-def update_car():
-    car = Car.get(Car.id == request.form['id'])
-    if car:
-        car.make = request.form['Make']
-        car.model = request.form['Model']
-        car.year = request.form['Year']
+# PUT Car
+@app.route('/update/car/<int:carid>', methods=['POST'])
+def update_car(carid):
+    try:
+        car = Car.get(Car.id == carid)
+        if car:
+            car.make = request.form['Make']
+            car.model = request.form['Model']
+            car.year = request.form['Year']
 
-        car.save()
-
+            car.save()
+    except Exception as error:
+        pass
     return redirect(url_for('home'))
 
-
+# Run Server
 if __name__ == '__main__':
     app.run(debug=True)

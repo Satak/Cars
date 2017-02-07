@@ -10,7 +10,7 @@
   </div>
   <div class="card-block">
     <h4 class="card-title">Edit</h4>
-    <form action="/updateCar" method="POST">
+    <form action="/update/car/{{car[0].id}}" method="POST">
 
         <div class="form-group row">
             <label for="idcar" class="col-2 col-form-label">ID</label>
@@ -43,7 +43,7 @@
         <button class="btn btn-primary btn-sm" type="submit" value="Post"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
     </form>
     <br />
-    <form action="/deleteCar" method="POST">
+    <form action="/delete/car/{{car[0].id}}" method="POST">
         <div class="form-group row">
             <label for="deleteCar" class="col-2 col-form-label">Delete</label>
             <div class="col-4"> 
